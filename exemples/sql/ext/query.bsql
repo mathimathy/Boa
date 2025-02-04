@@ -1,0 +1,8 @@
+OPEN data/myDb.db
+
+INSERT INTO test (field1,field2) VALUES (2,'coucou')
+INSERT INTO test (field1,field2) VALUES ([pop],'[pop]')
+
+SELECT * FROM test WHERE field2='test'
+
+CLOSE

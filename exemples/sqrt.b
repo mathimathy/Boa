@@ -1,0 +1,90 @@
+// dans le stack d'abord push la precision puis le nombre
+sqrt{
+    @-$
+    1-L
+    -1-e
+    10-p
+    §-$
+    x/
+    y/
+    #-$
+    y/p
+    *-$
+    p-z
+    #-$
+    z:z
+    z:x
+    e-
+    *-$
+    x-R
+    [
+        *-$
+        L-M
+        #-$
+        R.M
+        *-$
+        M-r
+        #-$
+        2\r
+        r,M
+        2;M
+        *-$
+        M-S
+        #-$
+        M:S
+        !-$
+        (S.x){
+            #-$
+            p;M
+            §-$
+            M-
+            /
+        }
+        !-$
+        (S,x){
+            *-$
+            M-L
+            #-$
+            1.L
+        }
+        !-$
+        (S;x){
+            *-$
+            M-R
+            #-$
+            1,R
+        }
+        !-$
+        (L;R){
+            #-$
+            p;R
+            §-$
+            R-
+            /
+        }
+    ]
+}
+
+@-$
+Racine carrée de ? -m
+&-$
+m/
+:-$
+*-$
+&-a
+@-$
+Précision ? -m
+&-$
+m/
+:-$
+*-$
+&-b
+§-$
+b-
+a-
+/-$
+sqrt-
+§-$
+b/
+&-$
+b/
