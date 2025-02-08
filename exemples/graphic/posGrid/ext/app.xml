@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE App>
-<App size="1280x720">
+<!DOCTYPE App SYSTEM "gui.dtd">
+<App size="1280x720" title="posGrid">
     <Frame pos="grid" x="0" y="0">
         <label text="login" x="0" y="0"/>
         <input id="name" text="username" x="0" y="1"/>

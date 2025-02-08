@@ -103,7 +103,9 @@ class Interpreter:
 		root = tree.getroot()
 		window = tk.Tk()
 		window.geometry(root.attrib["size"])
+		window.title(root.attrib["title"])
 		for el in root[:]:
+			id=[]
 			fr = tk.Frame(window)
 			p = el.attrib["pos"]
 			for widget in el[:]:
@@ -121,8 +123,8 @@ class Interpreter:
 					w.insert(0, widget.attrib["text"])
 				elif tag=="button":
 					self.xmlButton[widget.attrib["id"]]=widget.attrib["action"]
-					id = widget.attrib["id"]
-					w = tk.Button(fr, text=widget.attrib["text"], command=lambda : buttonClicked(id))
+					
+					w = tk.Button(fr, text=widget.attrib["text"], command=lambda c=widget.attrib["id"]: buttonClicked(c))
 				pos(w,p, widget.attrib)
 			pos(fr, p, el.attrib)
 		window.mainloop()
@@ -165,7 +167,7 @@ class Interpreter:
 		elif line[0]=="(":
 			if self.cmd==3:
 				if line[2]==".":
-					if int(self.var[line[1]])!=int(self.var[line[3]]):
+					if self.var[line[1]]!=self.var[line[3]]:
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -180,7 +182,7 @@ class Interpreter:
 							i+=1
 					self.cond+=1
 				elif line[2]==",":
-					if int(self.var[line[1]])>=int(self.var[line[3]]):
+					if self.var[line[1]]>=self.var[line[3]]:
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -195,7 +197,7 @@ class Interpreter:
 							i+=1
 					self.cond+=1
 				elif line[2]==";":
-					if int(self.var[line[1]])<=int(self.var[line[3]]):
+					if self.var[line[1]]<=self.var[line[3]]:
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -274,43 +276,43 @@ class Interpreter:
 		elif line[-2]==".":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])+int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])+float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])+int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])+float(self.var[line[0]])
 			elif self.cmd==8:
 				self.stack.push(self.var[line[-1]].get(line[:-2]))
 		elif line[-2]==",":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])-int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])-float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])-int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])-float(self.var[line[0]])
 		elif line[-2]==";":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])/int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])/float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])/int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])/float(self.var[line[0]])
 		elif line[-2]==":":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])*int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])*float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])*int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])*float(self.var[line[0]])
 		elif line[-2]=="/":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])**int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])**float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])**int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])**float(self.var[line[0]])
 			elif self.cmd==8:
 				self.var[line[-1]].callFunc(line[:-2])
 		elif line[-2]=="\\":
 			if self.cmd==1:
 				try:
-					self.var[line[-1]]=int(self.var[line[-1]])%int(line[:-2])
+					self.var[line[-1]]=float(self.var[line[-1]])%float(line[:-2])
 				except:
-					self.var[line[-1]]=int(self.var[line[-1]])%int(self.var[line[0]])
+					self.var[line[-1]]=float(self.var[line[-1]])%float(self.var[line[0]])
 		elif line[-2]=="+":
 			if self.cmd==1:
 				try:
@@ -337,15 +339,15 @@ class Interpreter:
 		
 	def execute(self):
 		while self.cursor<len(self.code):
-			#try:
+			try:
 				self.interprete(self.code[self.cursor])
 				if self.error!=None:
 					print(self.error)
 					return
 				self.cursor+=1
-			#except Exception as e:
-			#	print(f"An error occured at line {self.cursor+1}: {e}")
-			#	quit()
+			except Exception as e:
+				print(f"An error occured at line {self.cursor+1}: {e}")
+				quit()
 	
 	def createObj(self, data):
 		obj=parentObj(self)

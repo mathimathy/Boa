@@ -4,3 +4,5 @@ p=<x:N;f:x->x²>
 reseau (->?)
 GenKey()
 SignedRSASend(1024, msg)
+
+création de template

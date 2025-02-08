@@ -1,0 +1,23 @@
+<!ELEMENT App (Frame+)>
+<!ATTLIST App size CDATA #REQUIRED>
+<!ATTLIST App title CDATA #REQUIRED>
+<!ELEMENT Frame (input|label|button)*>
+<!ATTLIST Frame pos (pack|grid) #REQUIRED>
+<!ATTLIST Frame x CDATA #IMPLIED>
+<!ATTLIST Frame y CDATA #IMPLIED>
+<!ELEMENT input EMPTY>
+<!ATTLIST input text CDATA #REQUIRED>
+<!ATTLIST input id ID #REQUIRED>
+<!ATTLIST input x CDATA #IMPLIED>
+<!ATTLIST input y CDATA #IMPLIED>
+<!ELEMENT label EMPTY>
+<!ATTLIST label text CDATA #REQUIRED>
+<!ATTLIST label id ID #IMPLIED>
+<!ATTLIST label x CDATA #IMPLIED>
+<!ATTLIST label y CDATA #IMPLIED>
+<!ELEMENT button EMPTY>
+<!ATTLIST button text CDATA #REQUIRED>
+<!ATTLIST button action CDATA #REQUIRED>
+<!ATTLIST button id ID #REQUIRED>
+<!ATTLIST button x CDATA #IMPLIED>
+<!ATTLIST button y CDATA #IMPLIED>

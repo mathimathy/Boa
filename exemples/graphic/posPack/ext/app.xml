@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE App>
-<App size="1280x720">
+<!DOCTYPE App SYSTEM "gui.dtd">
+<App size="1280x720" title="posPack">
     <Frame pos="pack">
         <label text="login"/>
         <input id="name" text="username"/>
