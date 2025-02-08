@@ -3,6 +3,8 @@ import os
 import pickle
 import time
 import sqlite3
+import xml.etree.ElementTree as ET
+import tkinter as tk
 
 class parentObj:
 	def __init__(self, inter):
@@ -72,14 +74,58 @@ class Interpreter:
 					c[-1]=",".join(val)
 					cursor.execute(" ".join(c))
 					db.commit()
-				elif (c:=l.split(" "))[0]=="SELECT":
-					val = c[-1].split(",")
-					val = [d.replace("[pop]",self.stack.pop()) if ("[pop]" in d) else d for d in val]
-					c[-1]=",".join(val)
+				elif (c:=l.split(" "))[0] in ["SELECT","UPDATE","DELETE"]:
+					c = [d.replace("[pop]",self.stack.pop()) if ("[pop]" in d) else d for d in c]
 					cursor.execute(" ".join(c))
 					for el in cursor.fetchone():
 						self.stack.push(el)
 			db.close()
+	
+	def executeXml(self, file):
+		self.xmlVar = {}
+		self.xmlButton = {}
+		def pos(w, p, attr):
+			if p=="pack":
+				w.pack()
+			elif p=="grid":
+				w.grid(column=int(attr["x"]), row=int(attr["y"]))
+		def buttonClicked(id):
+			for var in self.xmlVar.values():
+				if var[0]==0:
+					self.stack.push(var[1].get())
+			int = Interpreter(self.home, self.stack)
+			int.read(self.xmlButton[id])
+			print("")
+			for var in self.xmlVar.items():
+				if var[1][0]:
+					var[1][1].set(self.stack.pop())
+		tree = ET.parse(file)
+		root = tree.getroot()
+		window = tk.Tk()
+		window.geometry(root.attrib["size"])
+		for el in root[:]:
+			fr = tk.Frame(window)
+			p = el.attrib["pos"]
+			for widget in el[:]:
+				tag = widget.tag
+				if tag=="label":
+					attr = widget.attrib
+					if attr["text"]=="{pop}":
+						self.xmlVar[attr["id"]]=(True,tk.StringVar())
+						w = tk.Label(fr, textvariable=self.xmlVar[attr["id"]][1])
+					else:
+						w = tk.Label(fr, text=attr["text"])
+				elif tag=="input":
+					self.xmlVar[widget.attrib["id"]]=(False,tk.StringVar())
+					w = tk.Entry(fr,textvariable=self.xmlVar[widget.attrib["id"]][1])
+					w.insert(0, widget.attrib["text"])
+				elif tag=="button":
+					self.xmlButton[widget.attrib["id"]]=widget.attrib["action"]
+					id = widget.attrib["id"]
+					w = tk.Button(fr, text=widget.attrib["text"], command=lambda : buttonClicked(id))
+				pos(w,p, widget.attrib)
+			pos(fr, p, el.attrib)
+		window.mainloop()
 
 	def interprete(self, line):
 		if line=="/":
@@ -192,6 +238,8 @@ class Interpreter:
 			file = self.files[int(line[1:-1])]
 			if file[-5:]==".bsql":
 				self.executeBsql(self.home+"/"+file)
+			if file[-4:]==".xml":
+				self.executeXml(self.home+"/"+file)
 
 		elif line[-1]=="-":
 			if self.cmd==4:
@@ -263,6 +311,12 @@ class Interpreter:
 					self.var[line[-1]]=int(self.var[line[-1]])%int(line[:-2])
 				except:
 					self.var[line[-1]]=int(self.var[line[-1]])%int(self.var[line[0]])
+		elif line[-2]=="+":
+			if self.cmd==1:
+				try:
+					self.var[line[-1]]=self.var[line[-1]]+self.var[line[0]]
+				except:
+					self.var[line[-1]]=self.var[line[-1]]+line[:-2]
 		elif line[-1]=="{":
 			self.fctAdress[line[:-1]]=self.cursor
 			i=self.cursor
@@ -283,15 +337,15 @@ class Interpreter:
 		
 	def execute(self):
 		while self.cursor<len(self.code):
-			try:
+			#try:
 				self.interprete(self.code[self.cursor])
 				if self.error!=None:
 					print(self.error)
 					return
 				self.cursor+=1
-			except Exception as e:
-				print(f"An error occured at line {self.cursor+1}: {e}")
-				quit()
+			#except Exception as e:
+			#	print(f"An error occured at line {self.cursor+1}: {e}")
+			#	quit()
 	
 	def createObj(self, data):
 		obj=parentObj(self)

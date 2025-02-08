@@ -1,0 +1,30 @@
+O={0}
+N={x:N+O;S(x)}
+Add:x,y->{
+    y=0{
+        ret x
+    }
+    y>0{
+        ret Add(S(x),P(y))
+    }
+}
+Sous:x,y->{
+    y=0{
+        ret x
+    }
+    y>0{
+        ret Sous(P(x),P(y))
+    }
+}
+FullAdd:x,y->{
+    y>0{
+        ret Add(x,y)
+    }
+    y<0{
+        ret Sous(x,y)
+    }
+    {
+        ret x
+    }
+}
+N=<x:N;+:x,N{?}->FullAdd>

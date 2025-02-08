@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE App>
+<App size="1280x720">
+    <Frame pos="grid" x="0" y="0">
+        <label text="login" x="0" y="0"/>
+        <input id="name" text="username" x="0" y="1"/>
+        <button id="submit" action="src/post.b" text="submit" x="0" y="2"/>
+        <label id="output" text="{pop}" x="1" y="2"/>
+    </Frame>
+</App>

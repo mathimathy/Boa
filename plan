@@ -1,0 +1,6 @@
+math lang (->voir photo mes maths)
+p=<x:N;f:x->x²>
+
+reseau (->?)
+GenKey()
+SignedRSASend(1024, msg)
