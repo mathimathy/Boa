@@ -37,6 +37,7 @@ a$ wait a seconds (affiche aussi \n)
 § stack
 a- push a
 a/ pull in a
+a. get head a
 
 µ file
 - save stack to file

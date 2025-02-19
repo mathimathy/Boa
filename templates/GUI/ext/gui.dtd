@@ -7,45 +7,45 @@
 <!ATTLIST frame pos (pack|grid) #REQUIRED>
 <!ATTLIST frame x CDATA #IMPLIED>
 <!ATTLIST frame y CDATA #IMPLIED>
-<!ATTLIST frame expand CDATA #IMPLIED>
-<!ATTLIST frame side CDATA #IMPLIED>
+<!ATTLIST frame expand (True|False) #IMPLIED>
+<!ATTLIST frame side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT tabview (tab+)>
 <!ATTLIST tabview pos (pack|grid) #REQUIRED>
 <!ATTLIST tabview x CDATA #IMPLIED>
 <!ATTLIST tabview y CDATA #IMPLIED>
-<!ATTLIST tabview expand CDATA #IMPLIED>
-<!ATTLIST tabview side CDATA #IMPLIED>
+<!ATTLIST tabview expand (True|False) #IMPLIED>
+<!ATTLIST tabview side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT tab (input|label|button|checkbox|combobox|menu|radio|segbtn|slider|switch|scroll|frame)*>
 <!ATTLIST tab text CDATA #REQUIRED>
 <!ATTLIST tab x CDATA #IMPLIED>
 <!ATTLIST tab y CDATA #IMPLIED>
-<!ATTLIST tab expand CDATA #IMPLIED>
-<!ATTLIST tab side CDATA #IMPLIED>
+<!ATTLIST tab expand (True|False) #IMPLIED>
+<!ATTLIST tab side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT scroll (input|label|button|checkbox|combobox|menu|radio|segbtn|slider|switch|scroll|frame)*>
 <!ATTLIST scroll pos (pack|grid) #REQUIRED>
 <!ATTLIST scroll x CDATA #IMPLIED>
 <!ATTLIST scroll y CDATA #IMPLIED>
-<!ATTLIST scroll expand CDATA #IMPLIED>
-<!ATTLIST scroll side CDATA #IMPLIED>
+<!ATTLIST scroll expand (True|False) #IMPLIED>
+<!ATTLIST scroll side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT input EMPTY>
 <!ATTLIST input text CDATA #REQUIRED>
 <!ATTLIST input id ID #REQUIRED>
 <!ATTLIST input x CDATA #IMPLIED>
 <!ATTLIST input y CDATA #IMPLIED>
-<!ATTLIST input expand CDATA #IMPLIED>
-<!ATTLIST input side CDATA #IMPLIED>
+<!ATTLIST input expand (True|False) #IMPLIED>
+<!ATTLIST input side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT label EMPTY>
 <!ATTLIST label text CDATA #REQUIRED>
 <!ATTLIST label id ID #IMPLIED>
 <!ATTLIST label x CDATA #IMPLIED>
 <!ATTLIST label y CDATA #IMPLIED>
-<!ATTLIST label expand CDATA #IMPLIED>
-<!ATTLIST label side CDATA #IMPLIED>
+<!ATTLIST label expand (True|False) #IMPLIED>
+<!ATTLIST label side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT button EMPTY>
 <!ATTLIST button text CDATA #REQUIRED>
@@ -53,8 +53,8 @@
 <!ATTLIST button id ID #REQUIRED>
 <!ATTLIST button x CDATA #IMPLIED>
 <!ATTLIST button y CDATA #IMPLIED>
-<!ATTLIST button expand CDATA #IMPLIED>
-<!ATTLIST button side CDATA #IMPLIED>
+<!ATTLIST button expand (True|False) #IMPLIED>
+<!ATTLIST button side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT checkbox EMPTY>
 <!ATTLIST checkbox text CDATA #REQUIRED>
@@ -64,8 +64,8 @@
 <!ATTLIST checkbox id ID #REQUIRED>
 <!ATTLIST checkbox x CDATA #IMPLIED>
 <!ATTLIST checkbox y CDATA #IMPLIED>
-<!ATTLIST checkbox expand CDATA #IMPLIED>
-<!ATTLIST checkbox side CDATA #IMPLIED>
+<!ATTLIST checkbox expand (True|False) #IMPLIED>
+<!ATTLIST checkbox side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT combobox EMPTY>
 <!ATTLIST combobox values CDATA #REQUIRED>
@@ -73,8 +73,8 @@
 <!ATTLIST combobox id ID #REQUIRED>
 <!ATTLIST combobox x CDATA #IMPLIED>
 <!ATTLIST combobox y CDATA #IMPLIED>
-<!ATTLIST combobox expand CDATA #IMPLIED>
-<!ATTLIST combobox side CDATA #IMPLIED>
+<!ATTLIST combobox expand (True|False) #IMPLIED>
+<!ATTLIST combobox side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT menu EMPTY>
 <!ATTLIST menu values CDATA #REQUIRED>
@@ -82,24 +82,24 @@
 <!ATTLIST menu id ID #REQUIRED>
 <!ATTLIST menu x CDATA #IMPLIED>
 <!ATTLIST menu y CDATA #IMPLIED>
-<!ATTLIST menu expand CDATA #IMPLIED>
-<!ATTLIST menu side CDATA #IMPLIED>
+<!ATTLIST menu expand (True|False) #IMPLIED>
+<!ATTLIST menu side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT radio (value+)>
 <!ATTLIST radio action CDATA #REQUIRED>
 <!ATTLIST radio id ID #REQUIRED>
 <!ATTLIST radio x CDATA #IMPLIED>
 <!ATTLIST radio y CDATA #IMPLIED>
-<!ATTLIST radio expand CDATA #IMPLIED>
-<!ATTLIST radio side CDATA #IMPLIED>
+<!ATTLIST radio expand (True|False) #IMPLIED>
+<!ATTLIST radio side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT value EMPTY>
 <!ATTLIST value text CDATA #REQUIRED>
 <!ATTLIST value value CDATA #REQUIRED>
 <!ATTLIST value x CDATA #IMPLIED>
 <!ATTLIST value y CDATA #IMPLIED>
-<!ATTLIST value expand CDATA #IMPLIED>
-<!ATTLIST value side CDATA #IMPLIED>
+<!ATTLIST value expand (True|False) #IMPLIED>
+<!ATTLIST value side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT segbtn EMPTY>
 <!ATTLIST segbtn values CDATA #REQUIRED>
@@ -107,8 +107,8 @@
 <!ATTLIST segbtn id ID #REQUIRED>
 <!ATTLIST segbtn x CDATA #IMPLIED>
 <!ATTLIST segbtn y CDATA #IMPLIED>
-<!ATTLIST segbtn expand CDATA #IMPLIED>
-<!ATTLIST segbtn side CDATA #IMPLIED>
+<!ATTLIST segbtn expand (True|False) #IMPLIED>
+<!ATTLIST segbtn side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT slider EMPTY>
 <!ATTLIST slider action CDATA #REQUIRED>
@@ -117,8 +117,8 @@
 <!ATTLIST slider id ID #REQUIRED>
 <!ATTLIST slider x CDATA #IMPLIED>
 <!ATTLIST slider y CDATA #IMPLIED>
-<!ATTLIST slider expand CDATA #IMPLIED>
-<!ATTLIST slider side CDATA #IMPLIED>
+<!ATTLIST slider expand (True|False) #IMPLIED>
+<!ATTLIST slider side (top|left|right|bottom) #IMPLIED>
 
 <!ELEMENT switch EMPTY>
 <!ATTLIST switch text CDATA #REQUIRED>
@@ -128,5 +128,5 @@
 <!ATTLIST switch id ID #REQUIRED>
 <!ATTLIST switch x CDATA #IMPLIED>
 <!ATTLIST switch y CDATA #IMPLIED>
-<!ATTLIST switch expand CDATA #IMPLIED>
-<!ATTLIST switch side CDATA #IMPLIED>
+<!ATTLIST switch expand (True|False) #IMPLIED>
+<!ATTLIST switch side (top|left|right|bottom) #IMPLIED>

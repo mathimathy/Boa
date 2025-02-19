@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE App SYSTEM "gui.dtd">
+<App size="1280x720" title="Title" style="ext/style.css">
+    <frame pos="pack">
+        <label text="Hello World !" />
+    </frame>
+</App>

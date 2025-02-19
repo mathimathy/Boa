@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE App SYSTEM "gui.dtd">
-<App size="1280x720" title="posPack">
-    <Frame pos="pack">
-        <label text="login"/>
-        <input id="name" text="username"/>
-        <button id="submit" action="src/post.b" text="submit"/>
-        <label id="output" text="{pop}"/>
-    </Frame>
+<App size="1280x720" title="posPack" style="ext/style.css">
+    <tabview pos="pack">
+        <tab text="tab coucou">
+            <label text="login"/>
+            <input id="name" text="username"/>
+            <button id="submit" action="src/post.b" text="submit"/>
+            <label id="output" text="{pop}"/>
+            <checkbox id="checkbox" text="checkbox" on="1" off="0" action="src/check.b"/>
+            <combobox id="combobox" values="a,b,c" action="src/combo.b"/>
+            <menu id="menu" values="a,b,c" action="src/menu.b"/>
+            <radio id="radio" action="src/radio.b">
+                <value text="choix 1" value="0"/>
+                <value text="choix 2" value="1"/>
+            </radio>
+            <segbtn id="segbtn" values="a,b,c" action="src/segbtn.b"/>
+            <slider id="slider" from="0" to="100" action="src/slider.b"/>
+            <switch id="switch" text="switch" on="1" off="0" action="src/switch.b"/>
+            <scroll pos="pack">
+                <label text="coucou"/>
+            </scroll>
+        </tab>
+        <tab text="tab 2">
+            <label text="coucou"/>
+        </tab>
+    </tabview>
 </App>

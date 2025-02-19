@@ -1,6 +1,7 @@
 <!ELEMENT App (Frame+)>
 <!ATTLIST App size CDATA #REQUIRED>
 <!ATTLIST App title CDATA #REQUIRED>
+<!ATTLIST App system (tk|ctk) #REQUIRED>
 <!ELEMENT Frame (input|label|button)*>
 <!ATTLIST Frame pos (pack|grid) #REQUIRED>
 <!ATTLIST Frame x CDATA #IMPLIED>

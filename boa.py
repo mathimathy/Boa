@@ -1,10 +1,12 @@
 import sys
 import os
+import shutil
 import pickle
 import time
 import sqlite3
 import xml.etree.ElementTree as ET
-import tkinter as tk
+import cssutils
+import customtkinter as ctk
 
 class parentObj:
 	def __init__(self, inter):
@@ -25,22 +27,31 @@ class parentObj:
 		self.func[name][0].read(self.func[name][1])
 
 class Stack:
-    def __init__(self):
-        self._d = []
-    
-    def push(self, value):
-        self._d.append(value)
-    
-    def pop(self):
-        if len(self._d)>0:
-            data = self._d[-1]
-            del self._d[-1]
-            return data
-        else:
-            raise IndexError("You're trying to pop the stack but it's empty")
-    
-    def empty(self):
-        self._d=[]
+	def __init__(self):
+		self._d = []
+		
+	def push(self, value):
+		self._d.append(value)
+		
+	def pop(self):
+		if len(self._d)>0:
+			data = self._d[-1]
+			del self._d[-1]
+			return data
+		else:
+			raise IndexError("You're trying to pop the stack but it's empty")
+	
+	def empty(self):
+		self._d=[]
+		return None
+	
+	def getHead(self):
+		if len(self._d)>0:
+			data = self._d[-1]
+			del self._d[-1]
+			return data
+		else:
+			raise IndexError("You're trying to pop the stack but it's empty")
 
 class Interpreter:
 
@@ -81,51 +92,179 @@ class Interpreter:
 						self.stack.push(el)
 			db.close()
 	
+	def parseCSS(self, file):
+		sheet = cssutils.parseFile(self.home+"/"+file)
+		cssData = {}
+		for rule in sheet:
+			propertyList = []
+
+			for property in rule.style:
+				propertyList.append((property.name,property.value))
+
+			cssData[rule.selectorText] = propertyList
+		return cssData
+
+	def executeCSS(self, widget,tag, attrib, css):
+		try:
+			properties = css[tag]
+			for prop in properties:
+				try:
+					code = f"widget.configure({prop[0]}='{prop[1]}')"
+					exec(code)
+				except:
+					code = f"widget.configure({prop[0]}={prop[1]})"
+					exec(code)
+		except:
+			pass
+		try:
+			properties = css["."+attrib["id"]]
+			for prop in properties:
+				try:
+					code = f"widget.configure({prop[0]}='{prop[1]}')"
+					exec(code)
+				except:
+					code = f"widget.configure({prop[0]}={prop[1]})"
+					exec(code)
+		except:
+			pass
+	
 	def executeXml(self, file):
 		self.xmlVar = {}
 		self.xmlButton = {}
+		self.xmlCheckBox = {}
+		self.xmlComboBox = {}
+		self.xmlOptionMenu = {}
+		self.xmlRadio = {}
+		self.xmlSegBtn = {}
+		self.xmlSlider = {}
+		self.xmlSwitch = {}
 		def pos(w, p, attr):
 			if p=="pack":
-				w.pack()
+				try:
+					expand = attr["expand"]
+					if expand=="True":
+						expand = True
+					else:
+						expand = False
+				except:
+					expand = False
+				try:
+					side = attr["side"]
+				except:
+					side = "top"
+				w.pack(expand=expand, side=side)
 			elif p=="grid":
 				w.grid(column=int(attr["x"]), row=int(attr["y"]))
-		def buttonClicked(id):
+		def event(id, type):
 			for var in self.xmlVar.values():
 				if var[0]==0:
-					self.stack.push(var[1].get())
+					self.stack.push(str(var[1].get()))
 			int = Interpreter(self.home, self.stack)
-			int.read(self.xmlButton[id])
+			match type:
+				case "button":
+					file = self.xmlButton[id]
+				case "checkbox":
+					file = self.xmlCheckBox[id]
+				case "combobox":
+					file = self.xmlComboBox[id]
+				case "optionmenu":
+					file = self.xmlOptionMenu[id]
+				case "radio":
+					file = self.xmlRadio[id]
+				case "segbtn":
+					file = self.xmlSegBtn[id]
+				case "slider":
+					file = self.xmlSlider[id]
+				case "switch":
+					file = self.xmlSwitch[id]
+				case _:
+					file = None
+			int.read(file)
 			print("")
 			for var in self.xmlVar.items():
-				if var[1][0]:
+				if var[1][0]==1:
 					var[1][1].set(self.stack.pop())
-		tree = ET.parse(file)
-		root = tree.getroot()
-		window = tk.Tk()
-		window.geometry(root.attrib["size"])
-		window.title(root.attrib["title"])
-		for el in root[:]:
-			id=[]
-			fr = tk.Frame(window)
-			p = el.attrib["pos"]
+				elif var[1][0]==2:
+					var[1][1].set(int(self.stack.pop()))
+		def createFrame(el, fr, p, css):
 			for widget in el[:]:
 				tag = widget.tag
 				if tag=="label":
 					attr = widget.attrib
 					if attr["text"]=="{pop}":
-						self.xmlVar[attr["id"]]=(True,tk.StringVar())
-						w = tk.Label(fr, textvariable=self.xmlVar[attr["id"]][1])
+						self.xmlVar[attr["id"]]=(1,ctk.StringVar())
+						w = ctk.CTkLabel(fr, textvariable=self.xmlVar[attr["id"]][1])
 					else:
-						w = tk.Label(fr, text=attr["text"])
+						w = ctk.CTkLabel(fr, text=attr["text"])
 				elif tag=="input":
-					self.xmlVar[widget.attrib["id"]]=(False,tk.StringVar())
-					w = tk.Entry(fr,textvariable=self.xmlVar[widget.attrib["id"]][1])
+					self.xmlVar[widget.attrib["id"]]=(0,ctk.StringVar())
+					w = ctk.CTkEntry(fr,textvariable=self.xmlVar[widget.attrib["id"]][1])
 					w.insert(0, widget.attrib["text"])
 				elif tag=="button":
 					self.xmlButton[widget.attrib["id"]]=widget.attrib["action"]
-					
-					w = tk.Button(fr, text=widget.attrib["text"], command=lambda c=widget.attrib["id"]: buttonClicked(c))
+					w = ctk.CTkButton(fr, text=widget.attrib["text"], command=lambda c=widget.attrib["id"]: event(c, "button"))
+				elif tag=="checkbox":
+					self.xmlVar[widget.attrib["id"]]=(0,ctk.StringVar())
+					self.xmlCheckBox[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkCheckBox(fr, text=widget.attrib["text"], command=lambda c=widget.attrib["id"]: event(c, "checkbox"), variable=self.xmlVar[widget.attrib["id"]][1], onvalue=widget.attrib["on"], offvalue=widget.attrib["off"])
+				elif tag=="combobox":
+					self.xmlVar[widget.attrib["id"]]=(0, ctk.StringVar())
+					self.xmlComboBox[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkComboBox(fr, values=widget.attrib["values"].split(","), command=lambda _, c=widget.attrib["id"]: event(c, "combobox"), variable=self.xmlVar[widget.attrib["id"]][1])
+				elif tag=="menu":
+					self.xmlVar[widget.attrib["id"]]=(0, ctk.StringVar())
+					self.xmlOptionMenu[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkOptionMenu(fr, values=widget.attrib["values"].split(","), command=lambda _, c=widget.attrib["id"]: event(c, "optionmenu"), variable=self.xmlVar[widget.attrib["id"]][1])
+				elif tag=="radio":
+					self.xmlVar[widget.attrib["id"]]=(0, ctk.StringVar())
+					self.xmlRadio[widget.attrib["id"]]=widget.attrib["action"]
+					for value in widget[:]:
+						button = ctk.CTkRadioButton(fr, text=value.attrib["text"], command=lambda c=widget.attrib["id"]: event(c, "radio"), variable=self.xmlVar[widget.attrib["id"]][1], value=value.attrib["value"])
+						pos(button, p, widget.attrib)
+					continue
+				elif tag=="segbtn":
+					self.xmlVar[widget.attrib["id"]]=(0, ctk.StringVar())
+					self.xmlSegBtn[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkSegmentedButton(fr, values=widget.attrib["values"].split(","), command=lambda _, c=widget.attrib["id"]: event(c, "segbtn"), variable=self.xmlVar[widget.attrib["id"]][1])
+				elif tag=="slider":
+					self.xmlVar[widget.attrib["id"]]=(0, ctk.IntVar())
+					self.xmlSlider[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkSlider(fr, from_=int(widget.attrib["from"]), to=int(widget.attrib["to"]), command=lambda _, c=widget.attrib["id"]: event(c, "slider"), variable=self.xmlVar[widget.attrib["id"]][1])
+				elif tag=="switch":
+					self.xmlVar[widget.attrib["id"]]=(0,ctk.StringVar())
+					self.xmlSwitch[widget.attrib["id"]]=widget.attrib["action"]
+					w = ctk.CTkSwitch(fr, text=widget.attrib["text"], command=lambda c=widget.attrib["id"]: event(c, "switch"), variable=self.xmlVar[widget.attrib["id"]][1], onvalue=widget.attrib["on"], offvalue=widget.attrib["off"])
+				elif tag=="frame":
+					w = ctk.CTkFrame(fr)
+					createFrame(widget, w, widget.attrib["pos"], css)
+				elif tag=="scroll":
+					w = ctk.CTkScrollableFrame(fr)
+					createFrame(widget, w, widget.attrib["pos"], css)
 				pos(w,p, widget.attrib)
+				self.executeCSS(w,widget.tag, widget.attrib, css)
+		tree = ET.parse(file)
+		root = tree.getroot()
+		window = ctk.CTk()
+		window.geometry(root.attrib["size"])
+		window.title(root.attrib["title"])
+		try:
+			css = self.parseCSS(root.attrib["style"])
+		except:
+			css=None
+		for el in root[:]:
+			if el.tag=="frame":
+				fr = ctk.CTkFrame(window)
+			elif el.tag=="scroll":
+				fr = ctk.CTkScrollableFrame(window)
+			elif el.tag=="tabview":
+				tabview = ctk.CTkTabview(window)
+				pos(tabview, el.attrib["pos"], el.attrib)
+				for tab in el[:]:
+					tabview.add(tab.attrib["text"])
+					createFrame(tab,tabview.tab(tab.attrib["text"]), el.attrib["pos"], css)
+				break
+			p = el.attrib["pos"]
+			createFrame(el, fr, p, css)
 			pos(fr, p, el.attrib)
 		window.mainloop()
 
@@ -242,6 +381,9 @@ class Interpreter:
 				self.executeBsql(self.home+"/"+file)
 			if file[-4:]==".xml":
 				self.executeXml(self.home+"/"+file)
+		elif line[-1]==".":
+			if self.cmd==6:
+				self.var[line[:-1]]=self.stack.getHead()
 
 		elif line[-1]=="-":
 			if self.cmd==4:
@@ -339,15 +481,15 @@ class Interpreter:
 		
 	def execute(self):
 		while self.cursor<len(self.code):
-			try:
+			#try:
 				self.interprete(self.code[self.cursor])
 				if self.error!=None:
 					print(self.error)
 					return
 				self.cursor+=1
-			except Exception as e:
-				print(f"An error occured at line {self.cursor+1}: {e}")
-				quit()
+			#except Exception as e:
+			#	print(f"An error occured at line {self.cursor+1}: {e}")
+			#	quit()
 	
 	def createObj(self, data):
 		obj=parentObj(self)
@@ -409,14 +551,22 @@ def main(path, home):
 	interpreter.read(path)
 
 if __name__=="__main__":
-	file = sys.argv[1]
-	if file[0]=="/":
-		dct=""
+	arg1 = sys.argv[1]
+	if arg1=="create":
+		project = os.getcwd()+"/"+sys.argv[3]
+		if sys.argv[2].lower()=="gui":
+			shutil.copytree(sys.path[0]+"/templates/GUI", project)
+		else:
+			shutil.copytree(sys.path[0]+"/templates/CLI", project)
 	else:
-		dct = os.getcwd()
-	file=file.split("/")
-	if len(file)==1:
-		main(file[0], dct+"/")
-	else:
-		dct+="/"+"/".join(file[:-1])
-		main(file[-1], dct+"/")
+		file = sys.argv[1]
+		if file[0]=="/":
+			dct=""
+		else:
+			dct = os.getcwd()
+		file=file.split("/")
+		if len(file)==1:
+			main(file[0], dct+"/")
+		else:
+			dct+="/"+"/".join(file[:-1])
+			main(file[-1], dct+"/")

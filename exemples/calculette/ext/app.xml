@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE App SYSTEM "gui.dtd">
 <App size="1280x720" title="Calculette">
-    <Frame pos="grid" x="0" y="0">
+    <frame pos="grid" x="0" y="0">
         <label text="{pop}" id="display" x="0" y="0"/>
-    </Frame>
-    <Frame pos="grid" x="0" y="1">
+    </frame>
+    <frame pos="grid" x="0" y="1">
         <button text="7" action="src/button/b7.b" id="b7" x="0" y="0" />
         <button text="8" action="src/button/b8.b" id="b8" x="1" y="0" />
         <button text="9" action="src/button/b9.b" id="b9" x="2" y="0" />
@@ -21,5 +21,5 @@
         <button text="0" action="src/button/b0.b" id="b0" x="1" y="3" />
         <button text="=" action="src/button/bequal.b" id="bequal" x="2" y="3" />
         <button text="/" action="src/button/bdivide.b" id="bdivide" x="3" y="3" />
-    </Frame>
+    </frame>
 </App>
