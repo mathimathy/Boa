@@ -4,14 +4,4 @@ reseau (->?)
 
 Graphic Library (SDL?)
 
-Implementation c/c++
-
-
-
-
-
-
-
-POSSIB:
-Interpreter: Python, C++
-Compiler vers c++: Python, C++
+Implementation c/c++/py

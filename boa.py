@@ -306,7 +306,7 @@ class Interpreter:
 		elif line[0]=="(":
 			if self.cmd==3:
 				if line[2]==".":
-					if self.var[line[1]]!=self.var[line[3]]:
+					if float(self.var[line[1]])!=float(self.var[line[3]]):
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -321,7 +321,7 @@ class Interpreter:
 							i+=1
 					self.cond+=1
 				elif line[2]==",":
-					if self.var[line[1]]>=self.var[line[3]]:
+					if float(self.var[line[1]])>=float(self.var[line[3]]):
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -336,7 +336,7 @@ class Interpreter:
 							i+=1
 					self.cond+=1
 				elif line[2]==";":
-					if self.var[line[1]]<=self.var[line[3]]:
+					if float(self.var[line[1]])<=float(self.var[line[3]]):
 						i=self.cursor
 						number=0
 						while i<len(self.code):
