@@ -2,6 +2,12 @@ reseau (->?)
     GenKey()
     SignedRSASend(1024, msg)
 
+math
+
 Graphic Library (SDL?)
 
+String
+
 Implementation c/c++/py
+
+documentation (partiellement faite)

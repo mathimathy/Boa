@@ -1,0 +1,96 @@
+[.def]
+les champs suivant doivent apparaître même s'ils ne contiennent rien sous peine d'erreur
+
+main: (localisation du fichier .b lancé au démarrage)
+incl: (tous les fichiers .b à ajouter au main)
+obj: (liste des fichiers .bObj)
+ext: (liste des fichiers d'extension: .bsql, .xml)
+
+[.b]
+$ registre commande
+
+@ assignation var (le nom d'une variable ne peut être que de 1 caractère)
+n-a a=n (avec n qui n'est pas une variable)
+
+& écriture
+a- écrit a en traduisant en ascii
+a/ écrit a tel quel
+
+# operation (a doit être une variable)
+b.a -> a=a+b
+b,a -> a=a-b
+b;a -> a=a/b
+b:a -> a=a*b
+b/a -> a=a**b
+b\a -> a=a%b
+
+! comparaison (a doit être une variable)
+b.a -> a=b
+b,a -> a<b
+b;a -> a>b
+
+/ fonction (f doit être défini avant son appel)
+f- appel f
+
+* copie
+b-a a=b (seulement entre variable)
+
+/ finit la boucle dans laquelle on est
+[] boucle le code entre crochet à l'infini
+
+functionName{} crée une fonction du nom fonctionName (aucune limite de taille de nom)
+
+%-$ demande une entrée à l'utilisateur de 1 caractère qui est transformé en ascii et stocké dans la variable &
+:-$ demande une entrée à l'utilisateur qui est stockée dans la variable &
+
+a$ attends la valeur de a en seconde (affiche aussi \n)
+
+§ stack
+a- ajoute la valeur de la variable a au stack
+a/ retire la dernière valeur du stack et la stocke dans la variable a
+a. copie la première valeur du stack et la stocke dans la variable a
+
+µ file
+- sauvegarde le stack dans le fichier "out.bdata"
+/ charge le fichier "out.bdata" dans le stack
+
+^ obj
+obj-o crée une instance de l'objet obj dans la variable o
+f/o appelle la méthode f de l'objet stocké dans o
+a.o ajoute le paramètre a de l'objet stocké dans o dans le stock
+
+<n> lance le nème fichier dans les extensions
+
+
+[.bObj]
+la syntaxe est la suivante (le nom de l'objet n'est pas limité en taille):
+
+nomObjet{
+
+}
+
+a: get -> crée le paramètre a et récupère sa valeur dans le stack
+a: set 2 -> crée le paramètre a et défini sa valeur à 2
+a:file.bFunc -> crée une méthode a dont le code se trouve à file.bFunc
+
+[.bFunc]
+les fichiers .bFunc sont les codes des méthodes des objets. Ils utilisent une version modifié des fichiers .b. Toutes les commandes sont les mêmes, Voilà les ajouts.
+
+get a -> récupère la valeur du paramètre a et la stocke dans la variable a
+ret a->b -> stocke la valeur de la variable a dans le paramètre b
+
+[.bsql]
+OPEN file.db -> ouvre la base de donnée stockée à file.db
+INSERT
+SELECT
+DELETE
+UPDATE
+fonctionne commme en sql
+possibilité de mettre [pop] pour retirer la dernière valeur du stack
+CLOSE -> ferme la base de donnée et reviens au fichier d'où l'extension a été appelée
+
+[.xml]
+
+
+
+[.css]

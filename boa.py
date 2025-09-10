@@ -353,26 +353,35 @@ class Interpreter:
 		elif line[1:]=="-$":
 			if line[0]=="@":
 				self.cmd=0
+				self.var['$']=line[0]
 			elif line[0]=="#":
 				self.cmd=1
+				self.var['$']=line[0]
 			elif line[0]=="&":
 				self.cmd=2
+				self.var['$']=line[0]
 			elif line[0]=="!":
 				self.cmd=3
+				self.var['$']=line[0]
 			elif line[0]=="%":
 				self.var["&"]=str(ord(input()))
 			elif line[0]==":":
 				self.var["&"]=input()
 			elif line[0]=="/":
 				self.cmd=4
+				self.var['$']=line[0]
 			elif line[0]=="*":
 				self.cmd=5
+				self.var['$']=line[0]
 			elif line[0]=="§":
 				self.cmd=6
+				self.var['$']=line[0]
 			elif line[0]=="µ":
 				self.cmd=7
+				self.var['$']=line[0]
 			elif line[0]=="^":
 				self.cmd=8
+				self.var['$']=line[0]
 			else:
 				self.error=f"[{self.cursor+1}] The Command doesn't exist"
 		elif line[-1]==">" and line[0]=="<":
