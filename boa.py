@@ -481,15 +481,11 @@ class Interpreter:
 		
 	def execute(self):
 		while self.cursor<len(self.code):
-			#try:
-				self.interprete(self.code[self.cursor])
-				if self.error!=None:
-					print(self.error)
-					return
-				self.cursor+=1
-			#except Exception as e:
-			#	print(f"An error occured at line {self.cursor+1}: {e}")
-			#	quit()
+			self.interprete(self.code[self.cursor])
+			if self.error!=None:
+				print(self.error)
+				return
+			self.cursor+=1
 	
 	def createObj(self, data):
 		obj=parentObj(self)

@@ -1,0 +1,17 @@
+reseau (->?)
+    GenKey()
+    SignedRSASend(1024, msg)
+
+Graphic Library (SDL?)
+
+Implementation c/c++
+
+
+
+
+
+
+
+POSSIB:
+Interpreter: Python, C++
+Compiler vers c++: Python, C++
