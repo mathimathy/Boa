@@ -73,7 +73,7 @@ class Interpreter:
 		self.files=[]
 	
 	def executeBsql(self, file):
-		with open(file) as f:
+		with open(file, 'r', encoding="utf-8") as f:
 			while (l:=f.readline().replace("\n", ""))!="CLOSE":
 				if (c:=l.split(" "))[0]=="OPEN":
 					db = sqlite3.connect(self.home+separator+c[1])
@@ -98,7 +98,7 @@ class Interpreter:
 			propertyList = []
 
 			for property in rule.style:
-				propertyList.append((property.name,property.value))
+				propertyList.append((property.name,property.value.replace("'", "").replace('"', '').replace('\\', '"')))
 
 			cssData[rule.selectorText] = propertyList
 		return cssData
@@ -109,9 +109,11 @@ class Interpreter:
 			for prop in properties:
 				try:
 					code = f"widget.configure({prop[0]}='{prop[1]}')"
+					print(code)
 					exec(code)
 				except:
 					code = f"widget.configure({prop[0]}={prop[1]})"
+					print(code)
 					exec(code)
 		except:
 			pass
@@ -308,7 +310,7 @@ class Interpreter:
 		elif line[0]=="(":
 			if self.cmd==3:
 				if line[2]==".":
-					if float(self.var[line[1]])!=float(self.var[line[3]]):
+					if self.var[line[1]]!=self.var[line[3]]:
 						i=self.cursor
 						number=0
 						while i<len(self.code):
@@ -375,7 +377,7 @@ class Interpreter:
 			elif line[0]=="*":
 				self.cmd=5
 				self.var['$']=line[0]
-			elif line[0]=="§":
+			elif line=="§-$":
 				self.cmd=6
 				self.var['$']=line[0]
 			elif line[0]=="µ":
@@ -514,18 +516,18 @@ class Interpreter:
 
 	def read(self, path):
 		if path[-4:]==".def":
-			with open(self.home+path) as f:
+			with open(self.home+path, encoding="utf-8") as f:
 				definitions = f.read().split("\n")
 			code=""
 			if (icl:=definitions[1].split(":")[1])!="":
 				include = icl.split(",")
 				for el in include:
-					with open(self.home+el) as f:
+					with open(self.home+el, encoding="utf-8") as f:
 						code+=f.read()+"\n"
 			if (obj:=definitions[2].split(":")[1])!="":
 				obj = obj.split(",")
 				for o in obj:
-					with open(self.home+o) as f:
+					with open(self.home+o, encoding="utf-8") as f:
 						data=f.read()
 						data=[l.strip() for l in data.split("\n")]
 						name=data[0][:-1]
@@ -533,19 +535,19 @@ class Interpreter:
 						self.object[name]=data
 			if (files:=definitions[3].split(":")[1])!="":
 				self.files = files.split(",")
-			with open(self.home+definitions[0].split(":")[1]) as f:
+			with open(self.home+definitions[0].split(":")[1], encoding="utf-8") as f:
 				code+=f.read()
 			self.code = code.split("\n")
 			self.code = [line.strip() for line in self.code]
 			self.execute()
 		elif path[-2:]==".b":
-			with open(self.home+path) as f:
+			with open(self.home+path, encoding='utf-8') as f:
 				code = f.read()
 			self.code = code.split("\n")
 			self.code = [line.strip() for line in self.code]
 			self.execute()
 		elif path[-6:]==".bFunc":
-			with open(self.home+path) as f:
+			with open(self.home+path, encoding='utf-8') as f:
 				code = f.read()
 			self.objFunc=True
 			self.code = code.split("\n")

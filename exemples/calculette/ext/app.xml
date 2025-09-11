@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE App SYSTEM "gui.dtd">
-<App size="1280x720" title="Calculette">
+<App size="400x500" title="Calculette" style="ext/style.css">
     <frame pos="grid" x="0" y="0">
         <label text="{pop}" id="display" x="0" y="0"/>
     </frame>

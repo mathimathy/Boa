@@ -1,0 +1,12 @@
+button {
+    width: 100;
+    height: 100;
+    corner_radius: 0;
+    border_width: 2;
+    border_color: dark-blue;
+}
+label {
+    width: 400;
+    height: 100;
+    font: '("Arial", 25)';
+}
