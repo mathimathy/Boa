@@ -7,6 +7,7 @@ import sqlite3
 import xml.etree.ElementTree as ET
 import cssutils
 import customtkinter as ctk
+import platform
 
 class parentObj:
 	def __init__(self, inter):
@@ -47,11 +48,9 @@ class Stack:
 	
 	def getHead(self):
 		if len(self._d)>0:
-			data = self._d[-1]
-			del self._d[-1]
-			return data
+			return self._d[0]
 		else:
-			raise IndexError("You're trying to pop the stack but it's empty")
+			raise IndexError("You're trying to get the head of the stack but it's empty")
 
 class Interpreter:
 
@@ -77,7 +76,7 @@ class Interpreter:
 		with open(file) as f:
 			while (l:=f.readline().replace("\n", ""))!="CLOSE":
 				if (c:=l.split(" "))[0]=="OPEN":
-					db = sqlite3.connect(self.home+"/"+c[1])
+					db = sqlite3.connect(self.home+separator+c[1])
 					cursor = db.cursor()
 				elif (c:=l.split(" "))[0]=="INSERT":
 					val = c[-1].split(",")
@@ -93,7 +92,7 @@ class Interpreter:
 			db.close()
 	
 	def parseCSS(self, file):
-		sheet = cssutils.parseFile(self.home+"/"+file)
+		sheet = cssutils.parseFile(self.home+separator+file)
 		cssData = {}
 		for rule in sheet:
 			propertyList = []
@@ -268,6 +267,9 @@ class Interpreter:
 			pos(fr, p, el.attrib)
 		window.mainloop()
 
+	def executePy(self, file):
+		os.system(f'python {file}')
+
 	def interprete(self, line):
 		if line=="/":
 			if self.cmd==7:
@@ -387,9 +389,11 @@ class Interpreter:
 		elif line[-1]==">" and line[0]=="<":
 			file = self.files[int(line[1:-1])]
 			if file[-5:]==".bsql":
-				self.executeBsql(self.home+"/"+file)
+				self.executeBsql(self.home+separator+file)
 			if file[-4:]==".xml":
-				self.executeXml(self.home+"/"+file)
+				self.executeXml(self.home+separator+file)
+			if file[-3:]==".py":
+				self.executePy(self.home+separator+file)
 		elif line[-1]==".":
 			if self.cmd==6:
 				self.var[line[:-1]]=self.stack.getHead()
@@ -556,22 +560,26 @@ def main(path, home):
 	interpreter.read(path)
 
 if __name__=="__main__":
+	if platform.system()=="Windows":
+		separator='\\'
+	else:
+		separator="/"
 	arg1 = sys.argv[1]
 	if arg1=="create":
-		project = os.getcwd()+"/"+sys.argv[3]
+		project = os.getcwd()+separator+sys.argv[3]
 		if sys.argv[2].lower()=="gui":
-			shutil.copytree(sys.path[0]+"/templates/GUI", project)
+			shutil.copytree(sys.path[0]+f"{separator}templates{separator}GUI", project)
 		else:
-			shutil.copytree(sys.path[0]+"/templates/CLI", project)
+			shutil.copytree(sys.path[0]+f"{separator}templates{separator}CLI", project)
 	else:
 		file = sys.argv[1]
-		if file[0]=="/":
+		if file[0]==separator:
 			dct=""
 		else:
 			dct = os.getcwd()
-		file=file.split("/")
+		file=file.split(separator)
 		if len(file)==1:
-			main(file[0], dct+"/")
+			main(file[0], dct+separator)
 		else:
-			dct+="/"+"/".join(file[:-1])
-			main(file[-1], dct+"/")
+			dct+=separator+separator.join(file[:-1])
+			main(file[-1], dct+separator)

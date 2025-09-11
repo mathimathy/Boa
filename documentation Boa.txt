@@ -1,10 +1,18 @@
+[REQUIRED MODULE]
+cssutils
+customtkinter
+elementpath
+
+to download them use pip
+
+
 [.def]
 les champs suivant doivent apparaître même s'ils ne contiennent rien sous peine d'erreur
 
 main: (localisation du fichier .b lancé au démarrage)
 incl: (tous les fichiers .b à ajouter au main)
 obj: (liste des fichiers .bObj)
-ext: (liste des fichiers d'extension: .bsql, .xml)
+ext: (liste des fichiers d'extension: .bsql, .xml, .py)
 
 [.b]
 $ registre commande
@@ -28,6 +36,10 @@ b\a -> a=a%b
 b.a -> a=b
 b,a -> a<b
 b;a -> a>b
+SYNTAXE:
+(condition){
+    code à éxécuter
+}
 
 / fonction (f doit être défini avant son appel)
 f- appel f
@@ -94,3 +106,15 @@ CLOSE -> ferme la base de donnée et reviens au fichier d'où l'extension a ét�
 
 
 [.css]
+
+
+[.py]
+fichier python (utiliser le module bmod pour récupérer et sauvegarder les données sauvegardée dans out.bdata)
+bmod.loadStack(path) -> retourne le stack stocké dans path/out.bdata
+bmod.saveStack(stack, path) -> sauvegarde stack dans path/out.bdata
+
+la classe Stack possède 4 méthode:
+    .push(value) -> ajoute value au stack
+    .pop() -> retourne la dernière valeur du stack et la supprime
+    .empty() -> vide le stack
+    .getHead() -> retourne la première valeur du stack sans la supprimer
