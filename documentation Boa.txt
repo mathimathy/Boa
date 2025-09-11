@@ -1,9 +1,9 @@
-[REQUIRED MODULE]
+[LIBRAIRIE REQUISE]
 cssutils
 customtkinter
 elementpath
 
-to download them use pip
+pour les télécharger, veuillez utiliser l'outils PIP
 
 
 [.def]
